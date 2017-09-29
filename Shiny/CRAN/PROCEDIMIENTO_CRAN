@@ -1,0 +1,24 @@
+Procedimiento para que el paquete de R pueda ser alojado en el CRAN:
+
+
+comando para crear el esqueleto de un paquete para R:
+ package.skeleton("SeriestiempoBMR", path="/home/dfmarquez/Documentos/UNAL/SERIES/Shiny")
+
+Comando para realizar la depuracion de un documento Rd en este caso SeriestiempoBMR-package.Rd, para esto debe estar ubicado en el proyecto:
+ R CMD Rd2txt /home/dfmarquez/Documentos/UNAL/SERIES/Shiny/SeriestiempoBMR/man/SeriestiempoBMR-package.Rd
+
+Convierte la informacion del Rd que se encuentra en el proyecto y sus funciones a un formato web html para ver la informacion en una navegador web:
+ R CMD Rdconv --type='html' --output=SeriestiempoBMR.html SeriestiempoBMR-package.Rd
+
+
+Chekea el paquete y veremos los errores o advertencias para su correccion, esto desde la raiz del proyecto donde el resultado es la creacion de un archivo con extencion .Rdcheck que contiene el log de ejecucion del chekeo:
+ R CMD check SeriestiempoBMR
+
+Para construir el paquete finalmente se ejecuta generando un archivo .tar el cual se puede someter al CRAN:
+ R CMD build SeriestiempoBMR
+
+Para instalar su paquete en la localización habitual de todos los paquetes del programa R (/usr/local/lib/R/site-library) se ejecuta: 
+ R CMD INSTALL SeriestiempoBMR 
+
+
+

@@ -1,0 +1,9 @@
+Package: SeriestiempoBMR
+Type: Package
+Title: Tarea de series de tiempo y Modelado
+Version: 1.0
+Date: 2017-09-29
+Author: Bermudez-Marquez-Ruiz
+Maintainer: Bermudez-Marquez-Ruiz <desarrollo.marquez@gmail.com>
+Description: Trabajo final de Series de Tiempo y pronostico.
+License: GPL

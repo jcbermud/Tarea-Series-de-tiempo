@@ -1,0 +1,20 @@
+* using log directory ‘/home/dfmarquez/Documentos/UNAL/SERIES/Shiny/SeriestiempoBMR.Rcheck’
+* using R version 3.2.3 (2015-12-10)
+* using platform: x86_64-pc-linux-gnu (64-bit)
+* using session charset: UTF-8
+* checking for file ‘SeriestiempoBMR/DESCRIPTION’ ... OK
+* checking extension type ... Package
+* this is package ‘SeriestiempoBMR’ version ‘1.0’
+* checking package namespace information ... OK
+* checking package dependencies ... OK
+* checking if this is a source package ... OK
+* checking if there is a namespace ... OK
+* checking for executable files ... OK
+* checking for hidden files and directories ... OK
+* checking for portable file names ... OK
+* checking for sufficient/correct file permissions ... OK
+* checking whether package ‘SeriestiempoBMR’ can be installed ... ERROR
+Installation failed.
+See ‘/home/dfmarquez/Documentos/UNAL/SERIES/Shiny/SeriestiempoBMR.Rcheck/00install.out’ for details.
+* DONE
+Status: 1 ERROR

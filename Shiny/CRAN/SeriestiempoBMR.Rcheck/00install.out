@@ -1,0 +1,7 @@
+* installing *source* package ‘SeriestiempoBMR’ ...
+** R
+** preparing package for lazy loading
+Error in library(shiny) : there is no package called ‘shiny’
+Error : unable to load R code in package ‘SeriestiempoBMR’
+ERROR: lazy loading failed for package ‘SeriestiempoBMR’
+* removing ‘/home/dfmarquez/Documentos/UNAL/SERIES/Shiny/SeriestiempoBMR.Rcheck/SeriestiempoBMR’

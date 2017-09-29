@@ -14,7 +14,8 @@ library(MASS)
 library(car)
 library(plotly)
 library(ggplot2)
-library(rJava)
+
+
 
 #### Prueba 1 ####
 shinyServer(function(input, output, session){
@@ -95,15 +96,15 @@ shinyServer(function(input, output, session){
   output$decompose <- renderPlot({
     if(input$transformar =="No transformar"){
       dato <- seriecreada()
-      plot(decompose(dato, type = input$seasona))
+      plot(decompose(dato, type = input$dseasonal))
     }
     else if(input$transformar =="Logaritmo"){
       dato <- log10(seriecreada())
-      plot(decompose(dato,type = input$seasona))
+      plot(decompose(dato,type = input$dseasonal))
     }
     else if(input$transformar =="Raiz cuadrada"){
       dato <- sqrt(seriecreada())
-      plot(decompose(dato,type = input$seasona))
+      plot(decompose(dato,type = input$dseasonal))
     }
   })
   ### Fin de Analisis Descriptivo ###
@@ -111,10 +112,80 @@ shinyServer(function(input, output, session){
   ### Medias moviles ###
   output$ma <- renderPlot({
     dato <- seriecreada()
-    plot(dato,main = input$nombre1, xlab = input$ejex1, ylab = input$ejey1,type = 'l')
+    plot(dato,main = input$nombre2, xlab = input$ejex2, ylab = input$ejey2, type = 'l')
     ms <- ma(dato,order = input$order)
     lines(ms,col ="red")
-    
+    legend("topleft",legend = c("serie","ma"), pch = c(2,3), col = c("black","red"))
   })
   
+  ### Holt-Winter ###
+  hw2 <- eventReactive(input$hw,{
+    dato <- seriecreada()
+    HoltWinters(dato,alpha = input$alpha, beta = input$beta, gamma = input$gamma, seasonal = input$hseasonal)
+    
+  })
+  output$HW1 <- renderPrint({
+    hw2()
+  })
+  
+  output$HW <- renderPlot({
+    dato <- seriecreada()
+    plot(dato,main = input$nombre3, xlab = input$ejex3, ylab = input$ejey3, type = 'l')
+    lines(fitted(hw2())[,1],col = "blue")
+    legend("topleft",legend = c("serie","HW"), pch = c(2,3), col = c("black","blue"))
+  })
+  
+  ### Arima ###
+
+  ari <- eventReactive(input$arim,{
+    dato <- seriecreada()
+    Arima(dato,order = c(input$ar,input$d,input$ma), seasonal = c(input$AR,input$D,input$MA), include.mean = input$im)
+    
+  })
+  output$arima1 <- renderPrint({
+    ari()
+  })
+  
+  output$arima <- renderPlot({
+    dato <- seriecreada()
+    plot(dato,main = input$nombre4, xlab = input$ejex4, ylab = input$ejey4, type = 'l')
+    #ar <- Arima(dato,order = c(input$ar,input$d,input$ma), seasonal = c(input$AR,input$D,input$MA), include.mean = input$im)
+    #lines(fitted(ar),col = "blue")
+    lines(fitted(ari()),col = "blue")
+    legend("topleft",legend = c("serie","ARIMA"), pch = c(2,3), col = c("black","blue"))
+  })
+  
+  ### Regresion ###
+  output$regresion <- renderPlot({
+    dato <- seriecreada()
+    plot(dato,main = input$nombre5, xlab = input$ejex5, ylab = input$ejey5, type = 'l')
+    t <- 1:length(dato)
+    lineal <- lm(dato ~ t + I(t^2))
+    lines(fitted(lineal),col="blue")
+    #cuadratica <- lm(dato ~ t + I(t^2))
+    #lines(fitted(cuadratica),col="blue")
+    #cubica <- lm(dato ~ t + I(t^2) + I(t^3))
+    #lines(fitted(cubica),col="green")
+    legend("topleft",legend = c("serie","l1"), pch = c(2,3), col = c("black","blue"))
+  })
+  
+  output$lineal <- renderPrint({
+    dato <- seriecreada()
+    t <- 1:length(dato)
+    lineal <- lm(dato ~ t + I(t^2))
+    summary(lineal)
+  })
+  output$cuadratica <- renderPrint({
+    dato <- seriecreada()
+    t <- 1:length(dato)
+    cuadratica <- lm(dato ~ t + I(t^2))
+    summary(cuadratica)
+  })
+  
+  output$cubica <- renderPrint({
+    dato <- seriecreada()
+    t <- 1:length(dato)
+    cubica <- lm(dato ~ t + I(t^2) + I(t^3))
+    summary(cubica)
+  })
 })

@@ -196,7 +196,8 @@ shinyServer(function(input, output, session){
   ### Arima ###
   ari <- eventReactive(input$arim,{
     dato <- seriecreada()
-    Arima(dato,order = c(input$ar,input$d,input$ma), seasonal = c(input$AR,input$D,input$MA), include.mean = input$im)
+   # Arima(dato,order = c(input$ar,input$d,input$ma), seasonal = c(input$AR,input$D,input$MA), include.mean = input$im)
+    arima(dato,order = c(input$ar,input$d,input$ma), seasonal = c(input$AR,input$D,input$MA), include.mean = input$im)
     
   })
   output$arima1 <- renderPrint({
@@ -205,11 +206,16 @@ shinyServer(function(input, output, session){
   
   output$arima <- renderPlot({
     dato <- seriecreada()
-    plot(dato,main = input$nombre4, xlab = input$ejex4, ylab = input$ejey4, type = 'l')
-    #ar <- Arima(dato,order = c(input$ar,input$d,input$ma), seasonal = c(input$AR,input$D,input$MA), include.mean = input$im)
-    #lines(fitted(ar),col = "blue")
-    lines(fitted(ari()),col = "blue")
-    legend("topleft",legend = c("serie","ARIMA"),lty=1, col = c("black","blue"))
+    ar <- ari()
+    resmod1 <- residuals(ar)
+    
+    ajust=dato-resmod1
+    ts.plot(dato, ajust,main = input$nombre4, xlab = input$ejex4, ylab = input$ejey4, type = 'l')
+    lines(dato, col="black")
+    lines(ajust, col="red")
+    
+    
+    legend("topleft",legend = c("serie","ARIMA"),lty=1, col = c("black","red"))
   })
   
   ### Regresion ###

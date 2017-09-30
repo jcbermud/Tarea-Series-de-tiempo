@@ -45,6 +45,7 @@ shinyUI(fluidPage(
           numericInput("frecuencia","Frecuencia",value = 12,min = 1),
           numericInput("year","Año",value = 2017, min = 1),
           numericInput("month","Mes o Trimestre",value = 01,min = 01),
+          numericInput("lo","Observaciones sin considerar",value = 1),
           textInput("nombre","Nombre de la serie"),
           textInput("ejex","Nombre del eje x"),
           textInput("ejey","Nombre del eje y"),
@@ -52,8 +53,11 @@ shinyUI(fluidPage(
         ),#sidebarPanel1
         mainPanel(
           plotOutput("tsdisplay"),
+          plotOutput("tsdisplayoriginal"),
           h4("crear"),
-          verbatimTextOutput("crear")
+          verbatimTextOutput("crear"),
+          h4("original"),
+          verbatimTextOutput("original")
         )#mainPanel1
       )#sidebarLayout1          
     ),#tabPanel1
@@ -80,7 +84,8 @@ shinyUI(fluidPage(
           verbatimTextOutput("boxcox"),
           plotOutput("gboxcox"),
           plotOutput("transformar"),
-          plotOutput("decompose")
+          plotOutput("decompose"),
+          plotOutput("boxplot")
         )#mainPanel2
       )#sidebarLayout2
     ),#tabPanel2 
@@ -106,21 +111,27 @@ shinyUI(fluidPage(
     tabPanel("Holt-Winter",
              sidebarLayout(
                sidebarPanel(
+                 helpText("Nota: Si Beta = FALSE y Gamma = FALSE es un suavisamiento exponencial simple"),
                  numericInput("alpha","Alpha", value = 0),
-                 numericInput("beta","Beta", value = 0),
+                 checkboxInput("beta","Modelar tendencia Beta", value = FALSE),
+                 numericInput("bet","Beta", value = 0),
+                 helpText("Nota: Si Gamma = FALSE es un Holt"),
+                 checkboxInput("gamm","Modelar estacionalidad Gamma", value = FALSE),
                  numericInput("gamma","Gamma", value = 0),
+                 numericInput("prediccion","Número a predeccir", value = 0),
                  selectInput("hseasonal","Tipo de serie",
                              c("additive","multiplicative")),
-                 actionButton("hw","Correr HW"),
-                 textInput("nombre3","Nombre de la serie"),
-                 textInput("ejex3","Nombre del eje x"),
-                 textInput("ejey3","Nombre del eje y")
+                 actionButton("hw","Correr HW")
+                 #textInput("nombre3","Nombre de la serie"),
+                 #textInput("ejex3","Nombre del eje x"),
+                 #textInput("ejey3","Nombre del eje y")
                  
                ),#sidebarPanel3
                mainPanel(
                  plotOutput("HW"),
                  h4("HW1"),
-                 verbatimTextOutput("HW1")
+                 verbatimTextOutput("HW1"),
+                 plotOutput("residualh")
                )#mainPanel3
              )#sidebarLayout3
     ),#tabPanel3
@@ -150,7 +161,7 @@ shinyUI(fluidPage(
              )#sidebarLayout3
     ),#tabPanel3
     
-    tabPanel("Regresion",
+    tabPanel("Regresion tendencia",
              sidebarLayout(
                sidebarPanel(
                  textInput("nombre5","Nombre de la serie"),
@@ -165,10 +176,43 @@ shinyUI(fluidPage(
                   verbatimTextOutput("cuadratica"),
                   h4("cubica"),
                   verbatimTextOutput("cubica"),
-                  plotOutput("regresion")
+                  h4("AICYBIC"),
+                  verbatimTextOutput("AICYBIC"),
+                  h4("shapiro"),
+                  verbatimTextOutput("shapiro"),
+                  plotOutput("regresion"),
+                  plotOutput("residual")
                  
                )#mainPanel4
              )#sidebarLayout4
-    )#tabPanel4
+    ),#tabPanel4
+    
+    tabPanel("Regresion tendencia y estacionalidad",
+             sidebarLayout(
+               sidebarPanel(
+                 textInput("mesrefe","Referencia estacional"),
+                 textInput("nombre6","Nombre de la serie"),
+                 textInput("ejex6","Nombre del eje x"),
+                 textInput("ejey6","Nombre del eje y")
+                 
+               ),#sidebarPanel5
+               mainPanel(
+                 plotOutput("regresiont"),
+                 h4("linealt"),
+                 verbatimTextOutput("linealt"),
+                 h4("cuadraticat"),
+                 verbatimTextOutput("cuadraticat"),
+                 h4("cubicat"),
+                 verbatimTextOutput("cubicat"),
+                 h4("AICYBICt"),
+                 verbatimTextOutput("AICYBICt"),
+                 h4("shapirot"),
+                 verbatimTextOutput("shapirot"),
+
+                 plotOutput("residualt")
+                 
+               )#mainPanel5
+             )#sidebarLayout5
+    )#tabPanel5
   )#navbarPage
 ))#shinyUI
